@@ -80,7 +80,7 @@ fn main() {
     };
 
     // Move the selected file
-    if let Err(e) = move_file(&selected_file) {
+    if let Err(e) = prepare_move_file(&selected_file) {
         eprintln!("Failed to move file: {}", e);
         process::exit(1);
     }
@@ -209,7 +209,7 @@ fn select_file(files: Vec<FileInfo>) -> Result<FileInfo, Box<dyn std::error::Err
     Ok(selected)
 }
 
-fn move_file(file_info: &FileInfo) -> Result<(), Box<dyn std::error::Error>> {
+fn prepare_move_file(file_info: &FileInfo) -> Result<(), Box<dyn std::error::Error>> {
     let target_path = Path::new(&file_info.name);
 
     // Check if file already exists in current directory
@@ -229,7 +229,7 @@ fn move_file(file_info: &FileInfo) -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // Move the file
-    fs::rename(&file_info.path, target_path)?;
+    move_file(&file_info.path, &target_path)?;
     println!(
         "{}",
         format!(
@@ -238,6 +238,20 @@ fn move_file(file_info: &FileInfo) -> Result<(), Box<dyn std::error::Error>> {
         )
         .green()
     );
+
+    Ok(())
+}
+
+fn move_file(source_path: &Path, target_path: &Path) -> Result<(), Box<dyn std::error::Error>> {
+    fs::rename(source_path, target_path).or_else(|err| {
+        // Fallback to copy and delete
+        fs::copy(source_path, target_path)?;
+        if target_path.exists() {
+            fs::remove_file(source_path)?;
+            return Ok(());
+        }
+        Err(err)
+    })?;
 
     Ok(())
 }
