@@ -84,5 +84,3 @@ jobs:
           m-windows.exe/m.exe
           m-macos/m
         generate_release_notes: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
