@@ -83,7 +83,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          m-linux/m
-          m-windows.exe/m.exe
-          m-macos/m
+          m/m-linux
+          m/m-windows.exe
+          m/m-macos
         generate_release_notes: true
