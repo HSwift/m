@@ -21,13 +21,13 @@ jobs:
         include:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            artifact_name: m-linux
+            artifact_name: x86_64-unknown-linux-gnu
           - os: windows-latest
             target: x86_64-pc-windows-msvc
-            artifact_name: m-windows.exe
+            artifact_name: x86_64-pc-windows-msvc
           - os: macos-latest
             target: aarch64-apple-darwin
-            artifact_name: m-macos
+            artifact_name: aarch64-apple-darwin
     
     steps:
     - uses: actions/checkout@v4
@@ -83,7 +83,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          m/m/m-linux
-          m/m/m-windows.exe
-          m/m/m-macos
+          x86_64-unknown-linux-gnu
+          x86_64-pc-windows-msvc
+          aarch64-apple-darwin
         draft: true
